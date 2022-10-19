@@ -19,7 +19,7 @@ hotio image: `hotio/jellyfin` <a href="https://hub.docker.com/r/hotio/jellyfin">
 Jellyfin distributes [official container images on Docker Hub](https://hub.docker.com/r/jellyfin/jellyfin/) for multiple architectures.
 These images are based on Debian and [built directly from the Jellyfin source code](https://github.com/jellyfin/jellyfin/blob/master/Dockerfile).
 
-Additionally the [LinuxServer.io](https://www.linuxserver.io/) project and [hotio](https://github.com/hotio) distribute images based on Ubuntu and the official Jellyfin Ubuntu binary packages, see [here](https://github.com/linuxserver/docker-jellyfin/blob/master/Dockerfile) and [here](https://github.com/hotio/docker-jellyfin/blob/stable/linux-amd64.Dockerfile) to see their Dockerfile.
+Additionally the [LinuxServer.io](https://www.linuxserver.io/) project and [hotio](https://github.com/hotio) distribute images based on Ubuntu and the official Jellyfin Ubuntu binary packages, see [here](https://github.com/linuxserver/docker-jellyfin/blob/master/Dockerfile) and [here](https://github.com/hotio/jellyfin/blob/release/linux-amd64.Dockerfile) to see their Dockerfile.
 
 > [!Note]
 > For ARM hardware and RPi, it is recommended to use the LinuxServer.io or hotio image since hardware acceleration support is not yet available on the native image.
@@ -30,7 +30,7 @@ Additionally the [LinuxServer.io](https://www.linuxserver.io/) project and [hoti
 
 The basic steps to create and run a Jellyfin container using Docker are as follows.
 
-1. Follow the [offical installation guide to install Docker](https://docs.docker.com/engine/install).
+1. Follow the [official installation guide to install Docker](https://docs.docker.com/engine/install).
 
 2. Download the latest container image.
 
@@ -67,8 +67,8 @@ The basic steps to create and run a Jellyfin container using Docker are as follo
     --name jellyfin \
     --user uid:gid \
     --net=host \
-    --volume /path/to/config:/config \
-    --volume /path/to/cache:/cache \
+    --volume /path/to/config:/config \ # Alternatively --volume jellyfin-config:/config
+    --volume /path/to/cache:/cache \ # Alternatively --volume jellyfin-cache:/cache
     --mount type=bind,source=/path/to/media,target=/media \
     --restart=unless-stopped \
     jellyfin/jellyfin
@@ -76,7 +76,6 @@ The basic steps to create and run a Jellyfin container using Docker are as follo
 
 Bind Mounts are needed to pass folders from the host OS to the container OS whereas volumes are maintained by Docker and can be considered easier to backup and control by external programs.
 For a simple setup, it's considered easier to use Bind Mounts instead of volumes.
-Replace `jellyfin-config` and `jellyfin-cache` with `/path/to/config` and `/path/to/cache` respectively if using bind mounts.
 Multiple media libraries can be bind mounted if needed:
 
    ```sh
@@ -168,6 +167,7 @@ Steps to run Jellyfin using Podman are similar to the Docker steps.
     --userns keep-id \
     --volume jellyfin-cache:/cache:Z \
     --volume jellyfin-config:/config:Z \
+    --mount type=bind,source=/path/to/media,destination=/media,ro=true \
     docker.io/jellyfin/jellyfin:latest
    ```
 
@@ -180,7 +180,7 @@ Steps to run Jellyfin using Podman are similar to the Docker steps.
     sudo firewall-cmd --reload
     ```
 
-Podman doesn't require root access to run containers.
+Podman doesn't require root access to run containers, although there are some details to be mindful of; see [the relevant documentation](https://docs.podman.io/en/latest/markdown/podman.1.html#rootless-mode).
 For security, the Jellyfin container should be run using rootless Podman.
 Furthermore, it is safer to run as a non-root user within the container.
 The `--user` option will run with the provided user id and group id *inside* the container.
@@ -189,11 +189,11 @@ This ensures that the permissions for directories bind-mounted inside the contai
 
 Keep in mind that the `--label "io.containers.autoupdate=image"` flag will allow the container to be automatically updated via `podman auto-update`.
 
-The `z` (shared volume) or `Z` (private volume) volume option to allow Jellyfin to access the volumes on systems where SELinux is enabled.
+The `z` (shared volume) or `Z` (private volume) volume option tells Podman to relabel files inside the volumes as appropriate, for systems running SELinux.
 
-Replace `jellyfin-config`, `jellyfin-cache`, and `jellyfin-media` with `/path/to/config`, `/path/to/cache` and `/path/to/media` respectively if using bind mounts.
+Replace `jellyfin-config` and `jellyfin-cache` with `/path/to/config` and `/path/to/cache` if you wish to use bind mounts.
 
-This example mounts your media library read-only by appending ':ro' to the media volume. Remove this option if you wish to give Jellyfin write access to your media.
+This example mounts your media library read-only by setting `ro=true`; set this to `ro=false` if you wish to give Jellyfin write access to your media.
 
 #### Managing via Systemd
 
@@ -389,7 +389,7 @@ macOS Application packages and builds in TAR archive format are available [here]
 1. Stop the currently running server either via the dashboard or using the application icon.
 2. Move the `.app` package to the trash.
 
-**Deleting Configuation**
+**Deleting Configuration**
 
 This will delete all settings and user information. This applies for the .app package and the portable version.
 
@@ -450,19 +450,19 @@ cd /opt/jellyfin
 ```
 
 Download the latest generic Linux build for your architecture.
-The rest of these instructions assume version 10.7.7 is being installed (i.e. `jellyfin_10.7.7_amd64.tar.gz`).
+The rest of these instructions assume version 10.8.1 is being installed (i.e. `jellyfin_10.8.1_amd64.tar.gz`).
 Download the generic build, then extract the archive:
 
 ```sh
-sudo wget https://repo.jellyfin.org/releases/server/linux/stable/combined/jellyfin_10.7.7_amd64.tar.gz
-sudo tar xvzf jellyfin_10.7.7_amd64.tar.gz
+sudo wget https://repo.jellyfin.org/releases/server/linux/stable/combined/jellyfin_10.8.1_amd64.tar.gz
+sudo tar xvzf jellyfin_10.8.1_amd64.tar.gz
 ```
 
-Create a symbolic link to the Jellyfin 10.7.7 directory.
+Create a symbolic link to the Jellyfin 10.8.1 directory.
 This allows an upgrade by repeating the above steps and enabling it by simply re-creating the symbolic link to the new version.
 
 ```sh
-sudo ln -s jellyfin_10.7.7 jellyfin
+sudo ln -s jellyfin_10.8.1 jellyfin
 ```
 
 Create four sub-directories for Jellyfin data.
@@ -476,17 +476,17 @@ sudo mkdir data cache config log
 If you are not running a Debian derivative, install `ffmpeg` through your OS's package manager, and skip this section.
 
 > [!WARNING]
-> Not being able to use `jellyfin-ffmpeg` will most likely break hardware acceleration and tonemapping.
+> Not being able to use `jellyfin-ffmpeg5` will most likely break hardware acceleration and tonemapping.
 
 If you are running Debian or a derivative, you should [download](https://repo.jellyfin.org/releases/server/debian/versions/jellyfin-ffmpeg/) and install an `ffmpeg` release built specifically for Jellyfin.
-Be sure to download the latest release that matches your OS (4.4.1-1 for Debian Bullseye assumed below).
+Be sure to download the latest release that matches your OS (`5.0.1-8` for Debian Bullseye assumed below).
 
 ```sh
-sudo wget https://repo.jellyfin.org/releases/server/debian/versions/jellyfin-ffmpeg/4.4.1-1/jellyfin-ffmpeg_4.4.1-1-bullseye_amd64.deb
-sudo dpkg --install jellyfin-ffmpeg_4.4.1-1-bullseye_amd64.deb
+sudo wget https://repo.jellyfin.org/releases/server/debian/versions/jellyfin-ffmpeg/5.0.1-8/jellyfin-ffmpeg5_5.0.1-8-bullseye_amd64.deb
+sudo dpkg --install jellyfin-ffmpeg5_5.0.1-8-bullseye_amd64.deb
 ```
 
-If you run into any dependency errors, run this and it will install them and `jellyfin-ffmpeg`.
+If you run into any dependency errors, run this and it will install them and `jellyfin-ffmpeg5`.
 
 ```sh
 sudo apt install -f
@@ -769,7 +769,7 @@ Only `amd64` is supported on Ubuntu Xenial.
 3. Import the GPG signing key (signed by the Jellyfin Team):
 
     ```sh
-    curl -fsSL https://repo.jellyfin.org/ubuntu/jellyfin_team.gpg.key | gpg --dearmor -o /etc/apt/trusted.gpg.d/debian-jellyfin.gpg
+    curl -fsSL https://repo.jellyfin.org/ubuntu/jellyfin_team.gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/debian-jellyfin.gpg
     ```
 
 4. Add a repository configuration at `/etc/apt/sources.list.d/jellyfin.list`:

@@ -103,6 +103,21 @@ A third party app with direct play and HDR support. Available on Android, Androi
 
 - [Website](https://mrmc.tv)
 
+### Findroid
+
+Findroid is a third-party Android application for Jellyfin that provides a native user interface to browse and play movies and series.
+
+**Status:** ⭐ Active, 3rd-Party
+
+**Links:**
+
+<a href='https://play.google.com/store/apps/details?id=dev.jdtech.jellyfin'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="153"/>
+</a>
+<a href='https://apt.izzysoft.de/fdroid/index/apk/dev.jdtech.jellyfin'><img alt='Get it on IzzyOnDroid' src='https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png' width="153"/>
+</a>
+
+- [Github](https://github.com/jarnedemeulemeester/findroid)
+
 ## Roku
 
 ### Jellyfin for Roku
@@ -308,7 +323,7 @@ A third party app with direct play and HDR support. Available on iOS and Apple T
 
 ### Jellyfin for Kodi
 
-Kodi thick client for Jellyfin. This addon syncs your Jellyfin metadata into Kodi's local database for a more native feel.
+Kodi thick client for Jellyfin. This add-on syncs your Jellyfin metadata into Kodi's local database for a more native feel.
 
 **Status:** ⭐ Active
 
@@ -319,7 +334,7 @@ Kodi thick client for Jellyfin. This addon syncs your Jellyfin metadata into Kod
 
 ### JellyCon
 
-Kodi thin client for Jellyfin. This addon is fully dynamic and allows for fast user switching and is compatible with other Kodi sources.
+Kodi thin client for Jellyfin. This add-on is fully dynamic and allows for fast user switching and is compatible with other Kodi sources.
 
 **Status:** ⭐ Active
 
@@ -377,18 +392,6 @@ A wrapper around Jellyfin's web interface for UWP devices (Windows 10, Windows P
 
 - [GitHub](https://github.com/jellyfin/jellyfin-uwp)
 
-### Videotape
-
-A 3rd party UWP media player with support for Jellyfin.
-
-**Status:** ⭐ Active, 3rd-Party
-
-**Links:**
-
-<a href='//www.microsoft.com/store/productId/9nlvh2ll4p1z?cid=storebadge&ocid=badge'><img alt='Get it from Microsoft' src='https://developer.microsoft.com/en-us/store/badges/images/English_get-it-from-MS.png' width="200"/></a>
-
-- [Website](https://usuaia.com/videotape)
-
 ## Volumio
 
 ### Jellyfin for Volumio
@@ -412,3 +415,15 @@ A Discord bot that allows playing your Jellyfin music library in Discord voice c
 **Links:**
 
 - [GitHub](https://github.com/kgt1/jellyfin-discord-music-bot)
+
+## Popcorn Hour / Syabas
+
+### Jellyfin-NMT
+
+A proxy that generates YAMJ style HTML compatible with A-100/A-110 Popcorn Hour Network Media Tank devices.
+
+**Status:** ⭐ Active
+
+**Links:**
+
+- [GitHub](https://github.com/SenorSmartyPants/jellyfin-nmt)
